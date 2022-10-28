@@ -8,19 +8,23 @@ Dsm=4.4*10^-9;
 Dpm=4.8*10^-9;
 S0=6*10^-6;%mol/cm3
 Vmax0=60*10^-6;%mol/(cm2*s)
+L1=20*10^-7;%cm
+L2=100*10^-7;
+L=L1+L2;
 T=12;%s
-Vmax=Vmax0/S0*T;
+tse=T*L*L/Dse;
+tpe=T*L*L/Dpe;
+Vmaxs=Vmax0/S0*tse;
+Vmaxp=Vmax0/S0*tpe;
 Km0=33*10^-6;%mol/cm3
 Km=Km0/S0;
 
-L1=25*10^-7;%cm
-L2=100*10^-7;
-L=L1+L2;
+
 X=L/L;
 
 dt=1*10^-7;
 h=0.01;
-k=L1/L/h+1;
+k=round(L1/L/h)+1;
 
 N=X/h+1;
 x=0:h:X;
@@ -49,8 +53,8 @@ while(j<=M);
     
     %2--k-1
     for i=2:k-1;
-    Set(i)=Se(i)+dt/h/h*(Se(i+1)-2*Se(i)+Se(i-1))-dt/T*Vmax*Se(i)/(Km+Se(i));
-    Pet(i)=Pe(i)+dt/h/h*(Pe(i+1)-2*Pe(i)+Pe(i-1))+dt/T*Vmax*Se(i)/(Km+Se(i));
+    Set(i)=Se(i)+dt/h/h*(Se(i+1)-2*Se(i)+Se(i-1))-dt/T*Vmaxs*Se(i)/(Km+Se(i));
+    Pet(i)=Pe(i)+dt/h/h*(Pe(i+1)-2*Pe(i)+Pe(i-1))+dt/T*Vmaxp*Se(i)/(Km+Se(i));
     end
     
     Set(1)=Set(2);
@@ -90,7 +94,7 @@ tse=T*L*L/Dse;
 tpe=T*L*L/Dpe;
 x1=0:h*L*10^7:L*10^7;%nm
 Se1=Se*S0*10^6;%mM
-Pe1=Pe*S0*10^6;%uM
+Pe1=Pe*S0*10^9;%uM
 
 
 
